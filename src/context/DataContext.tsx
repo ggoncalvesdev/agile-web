@@ -1,15 +1,31 @@
 // eslint-disable-next-line camelcase
 import jwt_decode from 'jwt-decode'
-import { createContext, useState } from 'react'
+import React, { createContext, ReactNode, useState } from 'react'
 
 import { UserLoginType } from '../models/UserLoginType'
 
-// criando contexto
-export const DataContext = createContext({})
+interface DataContextProps {
+  dadosUsuarioLogin: UserLoginType | null
+  setDadosUsuarioLogin: (user: UserLoginType | null) => void
+  armazenaDadosUsuarioLogin: (jwt: string) => void
+}
+
+type DataProviderProps = {
+  children: ReactNode
+}
+
+export const DataContext = createContext<DataContextProps>({
+  dadosUsuarioLogin: null,
+  setDadosUsuarioLogin: () => {},
+  armazenaDadosUsuarioLogin: () => {},
+})
 
 // criando provider
-export const DataProvider = ({ children }: any) => {
-  const [dadosUsuarioLogin, setDadosUsuarioLogin] = useState<UserLoginType>()
+export const DataProvider: React.FC<DataProviderProps> = ({
+  children,
+}: any) => {
+  const [dadosUsuarioLogin, setDadosUsuarioLogin] =
+    useState<UserLoginType | null>(null)
 
   const armazenaDadosUsuarioLogin = (jwt: any) => {
     const tokenDecodificado: any = jwt_decode(jwt.token)
@@ -30,7 +46,11 @@ export const DataProvider = ({ children }: any) => {
 
   return (
     <DataContext.Provider
-      value={{ dadosUsuarioLogin, armazenaDadosUsuarioLogin }}
+      value={{
+        dadosUsuarioLogin,
+        armazenaDadosUsuarioLogin,
+        setDadosUsuarioLogin,
+      }}
     >
       {children}
     </DataContext.Provider>
