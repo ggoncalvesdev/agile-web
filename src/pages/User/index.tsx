@@ -28,24 +28,47 @@ export function User() {
   const [knowledgeLevel, setKnowledgeLevel] = useState(0)
   const { dadosUsuarioLogin } = useContext(DataContext)
 
+  const { armazenaDadosUsuarioLogin } = useContext(DataContext)
+
   useEffect(() => {
     loadSkillUser()
+  }, [dadosUsuarioLogin])
+
+  useEffect(() => {
+    usuarioLogado()
   }, [])
 
-  const loadSkillUser = async () => {
+  const usuarioLogado = async () => {
+    let tokenJwt: any = null
     try {
-      const response = await Api.get(`/userSkills`, {
-        headers: {
-          Authorization: `Bearer ${dadosUsuarioLogin?.token}`,
-        },
-      }).then((resp) => {
-        setDataSkillUser(resp.data)
-      })
-    } catch (e) {
-      console.error('Erro ao recuperar os dados do servidor.', e)
-      alert(
-        'Erro ao recuperar os dados do servidor, por favor, tente mais tarde.',
-      )
+      const response = localStorage.getItem('user')
+      if (response) {
+        tokenJwt = JSON.parse(response)
+
+        console.log(tokenJwt.token)
+      }
+      armazenaDadosUsuarioLogin(tokenJwt)
+    } catch (error) {}
+  }
+
+  const loadSkillUser = async () => {
+    if (dadosUsuarioLogin) {
+      try {
+        const response = await Api.get(`/userSkills`, {
+          headers: {
+            Authorization: `Bearer ${dadosUsuarioLogin?.token}`,
+          },
+        }).then((resp) => {
+          setDataSkillUser(resp.data)
+        })
+      } catch (e) {
+        console.error('Erro ao recuperar os dados do servidor.', e)
+        alert(
+          'Erro ao recuperar os dados do servidor, por favor, tente mais tarde.',
+        )
+      }
+    } else {
+      loadSkillUser()
     }
   }
 

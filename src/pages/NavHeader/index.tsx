@@ -1,12 +1,14 @@
 import { Link } from 'react-router-dom'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { Container, Logo, LogoPosition, Nav, TextNav } from './style'
 
 import IUser from '../../types/user.type'
 import authService from '../../services/Api/Request/auth'
+import { DataContext } from '../../context/DataContext'
 
 export const NavHeader = () => {
-  const [currentUser, setCurrentUser] = useState<IUser | undefined>(undefined)
+  const [currentUser, setCurrentUser] = useState<IUser | null>(null)
+  const { setDadosUsuarioLogin } = useContext(DataContext)
 
   useEffect(() => {
     const user = authService.getCurrentUser()
@@ -16,24 +18,10 @@ export const NavHeader = () => {
     }
   }, [])
 
-  /*  useEffect(() => {
-    searchSkill()
-  }, [])
-
-  const searchSkill = async () => {
-    try {
-      const response = await Api.get(`/skills/all`).then((response) => {})
-    } catch (e) {
-      console.error('Erro ao recuperar os dados do servidor.', e)
-      alert(
-        'Erro ao recuperar os dados do servidor, por favor, tente mais tarde.',
-      )
-    }
-  } */
-
   const logOut = () => {
     authService.logout()
-    setCurrentUser(undefined)
+    setCurrentUser(null)
+    setDadosUsuarioLogin(null)
   }
 
   return (
@@ -53,9 +41,6 @@ export const NavHeader = () => {
               <Link to={'/user'}>
                 <TextNav>User</TextNav>
               </Link>
-              {/*  <Link to={'/skill'}>
-                <TextNav>Skill</TextNav>
-              </Link> */}
             </>
           )}
           {currentUser ? (

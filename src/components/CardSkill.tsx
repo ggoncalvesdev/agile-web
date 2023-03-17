@@ -36,7 +36,7 @@ export const CardSkill = () => {
         `/userSkills`,
         {
           user: {
-            id: dadosUsuarioLogin.id,
+            id: dadosUsuarioLogin?.id,
           },
           skill: {
             id: idSkill,
@@ -47,7 +47,7 @@ export const CardSkill = () => {
           headers: { Authorization: `Bearer ${dadosUsuarioLogin?.token}` },
         },
       ).then((resp) => {
-        navigate('/user')
+        navigate('/home')
         onRefresh()
         if (resp.status === 201) {
           console.info('Skill cadastrada no perfil do usuario .')
@@ -63,17 +63,6 @@ export const CardSkill = () => {
     setRefreshing(true)
     setDataSkill([])
   }
-
-  const increaseLevel = () => {
-    if (knowledgeLevel < 10) {
-      setKnowledgeLevel(knowledgeLevel + 1)
-    }
-  }
-  const decreaseLevel = () => {
-    if (knowledgeLevel > 0) {
-      setKnowledgeLevel(knowledgeLevel - 1)
-    }
-  }
   return (
     <>
       {dataSkill.map((dataSkill: any) => (
@@ -86,19 +75,6 @@ export const CardSkill = () => {
               <Description>{dataSkill.description}</Description>
             </Inf>
             <DisplayButton>
-              <ContainerConfig>
-                <ButtonLevelContainer>
-                  <UpdateLevel>Atualizar Level: {knowledgeLevel}</UpdateLevel>
-                  <AlineButton>
-                    <ButtonLevel onClick={() => increaseLevel()}>
-                      <h3>+</h3>
-                    </ButtonLevel>
-                    <ButtonLevel onClick={() => decreaseLevel()}>
-                      <h3>-</h3>
-                    </ButtonLevel>
-                  </AlineButton>
-                </ButtonLevelContainer>
-              </ContainerConfig>
               <ContainerButton onClick={() => postSkill(dataSkill.id)}>
                 <Button>Cadastrar</Button>
               </ContainerButton>

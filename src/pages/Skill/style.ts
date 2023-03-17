@@ -20,15 +20,6 @@ export const Body = styled.body`
   gap: 10px;
 
   margin-bottom: 50px;
-  /*  background-color: black; */
-  /*  background-image: radial-gradient(
-    circle at 120.71% 70%,
-    #c9e2ff 0,
-    #82adff 25%,
-    #3c78f2 50%,
-    #00469e 75%,
-    #001b53 100%
-  ); */
 `
 export const Title = styled.h1`
   width: 100%;

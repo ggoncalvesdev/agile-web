@@ -1,8 +1,5 @@
 import { useContext, useState, useEffect, ChangeEvent } from 'react'
 
-import filter from 'lodash.filter'
-import ReactTable from 'react-table'
-
 import { Link, NavigateFunction, useNavigate } from 'react-router-dom'
 import { DataContext } from '../../context/DataContext'
 import { Api } from '../../services/Api/api'

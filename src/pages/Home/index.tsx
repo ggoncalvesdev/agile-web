@@ -24,14 +24,12 @@ import img from '../../assets/Programmer.png'
 import FooterImg from '../../assets/logo-agile-branca.png'
 import { useContext, useEffect } from 'react'
 import { DataContext } from '../../context/DataContext'
-import { retrieveLocalData } from '../../services/LocalStorageService'
 import { NavigateFunction, useNavigate } from 'react-router-dom'
 
 export function Home() {
   const navigate: NavigateFunction = useNavigate()
 
   const { armazenaDadosUsuarioLogin } = useContext(DataContext)
-  const { dadosUsuarioLogin } = useContext(DataContext)
 
   useEffect(() => {
     usuarioLogado()
@@ -41,10 +39,11 @@ export function Home() {
     let tokenJwt: any = null
 
     try {
-      const response = JSON.parse(await retrieveLocalData('user'))
+      const response = localStorage.getItem('user')
       if (response) {
-        tokenJwt = response
+        tokenJwt = JSON.parse(response)
         navigate('/login')
+        console.log(tokenJwt.token)
       }
       armazenaDadosUsuarioLogin(tokenJwt)
       navigate('/home')

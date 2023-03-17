@@ -1,7 +1,7 @@
-import { ChangeEvent, useContext, useState } from 'react'
+import { ChangeEvent, useContext, useEffect, useState } from 'react'
 import { Link, NavigateFunction, useNavigate } from 'react-router-dom'
 import { Checkbox } from '../../components/CheckBox'
-
+import CryptoJS from 'crypto-js'
 import {
   Background,
   Body,
@@ -24,6 +24,7 @@ import { DataContext } from '../../context/DataContext'
 import { storeLocalData } from '../../services/LocalStorageService'
 import { NavHeader } from '../NavHeader'
 import { Alerta } from '../../components/Alert'
+const encryptionKey = 'minha-chave-secreta'
 
 export const Login = () => {
   const [login, setLogin] = useState('')
@@ -33,6 +34,22 @@ export const Login = () => {
   const { armazenaDadosUsuarioLogin } = useContext(DataContext)
 
   const navigate: NavigateFunction = useNavigate()
+
+  useEffect(() => {
+    const storedLogin = localStorage.getItem('login')
+    const storedPassword = localStorage.getItem('password')
+    const storedChecked = localStorage.getItem('isChecked')
+
+    if (storedLogin && storedPassword && storedChecked) {
+      setLogin(storedLogin)
+      const decryptedPassword = CryptoJS.AES.decrypt(
+        storedPassword,
+        encryptionKey,
+      ).toString(CryptoJS.enc.Utf8)
+      setPassword(decryptedPassword)
+      setIsChecked(JSON.parse(storedChecked))
+    }
+  }, [])
 
   const handleLogin = async () => {
     let tokenJwt: any = null
@@ -77,7 +94,6 @@ export const Login = () => {
                 placeholder="Login"
                 onChange={handleLoginChange}
               />
-
               <SecurityImput>
                 <Imput
                   value={password}
@@ -85,7 +101,6 @@ export const Login = () => {
                   onChange={handlePasswordChange}
                   type={hidePass === true ? 'password' : 'text'}
                 />
-
                 {hidePass ? (
                   <>
                     <AiFillEye
@@ -120,6 +135,8 @@ export const Login = () => {
                   label="Lembrar login e senha"
                   checked={isChecked}
                   onChange={handleCheckboxChange}
+                  login={login}
+                  password={password}
                 />
               </div>
             </ContainerImput>
