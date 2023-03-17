@@ -1,16 +1,12 @@
 import styled from 'styled-components'
 export const Container = styled.div`
-  padding: 0;
-  margin: 0;
-  list-style: none;
-  border: 0;
   background-color: #0e0e0e;
 
   @media (max-width: 930px) {
     width: 100%;
   }
 `
-export const Header = styled.header`
+export const Header = styled.div`
   background-color: #0e0e0e;
   padding-bottom: 20%;
   text-align: right;
@@ -52,7 +48,6 @@ export const Title = styled.h1`
     text-align: center;
     font-size: 20px;
     margin-left: 22%;
-    /* margin-left: 60px; */
 
     width: 60%;
   }
@@ -100,24 +95,12 @@ export const SubTitle = styled.p`
     width: 90%;
   }
 `
-/* export const Body = styled.body`
-  position: relative;
-  width: 100%;
-  height: 100%;
-  border-radius: 20% 20% 20% 40% / 20% 20% 0% 60%;
-  transform: rotate(-25deg);
-
-  @media (max-width: 780px) {
-    margin-bottom: 100px;
-    margin-top: 100px;
-  }
-` */
 export const BackgroundOverlay = styled.div`
   position: relative;
   justify-content: center;
   align-items: center;
 
-  width: 99%;
+  width: 100%;
   height: 40vw;
 
   border-bottom-right-radius: 250%;
@@ -221,18 +204,10 @@ export const LogoFooterAgile = styled.img`
     align-self: center;
   }
 `
-export const LogoFooter = styled.img`
-  width: 20px;
-  margin-right: 10px;
-  margin-left: 10px;
-  margin-bottom: 10px;
 
-  @media (max-width: 630px) {
-    justify-content: center;
-  }
-`
 export const TextFooter = styled.a`
   color: #ffff;
+  margin-left: 10px;
 `
 
 export const Contacts = styled.div`
