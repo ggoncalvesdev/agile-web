@@ -1,33 +1,46 @@
-import React, { useState } from 'react'
-import Cookies from 'js-cookie'
-
+import React, { useEffect, useState } from 'react'
+import CryptoJS from 'crypto-js'
 interface CheckboxProps {
   label: string
   checked: boolean
   onChange: (checked: boolean) => void
+  login: string
+  password: string
 }
 
 export const Checkbox: React.FC<CheckboxProps> = ({
   label,
   checked,
   onChange,
+  login,
+  password,
 }) => {
   const [isChecked, setIsChecked] = useState<boolean>(checked)
 
+  useEffect(() => {
+    const storedLogin = localStorage.getItem('login')
+    const storedPassword = localStorage.getItem('password')
+    if (storedLogin === login && storedPassword === password) {
+      setIsChecked(true)
+    }
+  }, [])
+
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { checked } = event.target
+    const encryptionKey = 'minha-chave-secreta'
     setIsChecked(checked)
+    localStorage.setItem('isChecked', JSON.stringify(checked))
     onChange(checked)
 
-    const login = 'login'
-    const password = 'password'
-
     if (checked) {
-      Cookies.set('login', login, { httpOnly: true, secure: true })
-      Cookies.set('password', password, { httpOnly: true, secure: true })
+      localStorage.setItem('login', login)
+      localStorage.setItem(
+        'password',
+        CryptoJS.AES.encrypt(password, encryptionKey).toString(),
+      )
     } else {
-      Cookies.remove('login')
-      Cookies.remove('password')
+      localStorage.removeItem('login')
+      localStorage.removeItem('password')
     }
   }
 
